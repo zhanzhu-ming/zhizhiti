@@ -10,16 +10,6 @@
 @media(max-width:600px){.wrap{width:min(100% - 32px,1160px)}.topbar .wrap{font-size:10px}.nav{height:66px}.navlinks{display:none}.hero{padding:65px 0 55px}.hero-grid{gap:15px}.hero p{font-size:15px}.molecule{height:270px}.float-label{font-size:10px}.section{padding:64px 0}.section h2{font-size:28px}.cards,.applications,.process{grid-template-columns:1fr}.card{padding:22px}.app{min-height:155px}.stats-grid{gap:12px}.stat{padding:4px 10px}.stat b{font-size:13px}.stat span{font-size:10px}.form{grid-template-columns:1fr}.field.full,.form-note{grid-column:auto}.copyright{flex-direction:column}.quality-points{grid-template-columns:1fr 1fr}}
 </style>
 </head>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-  const supabaseClient = window.supabase.createClient(
-    'https://rmzhtdmtnkfzddgcmzen.supabase.co',
-    'sb_publishable_t_gnNbAi0mmM5ramYz0Khg_CDfgXQ_F'
-  );
-
-  console.log('Supabase connected!');
-</script>
 <body>
 <div class="topbar"><div class="wrap"><span>++专业脂质体技术++ · 面向企业客户的研发与供应服务</span><span>商务咨询：sales@yourcompany.com</span></div></div>
 <header class="wrap nav"><a class="brand" href="#home"><span class="logo">◉</span><span>澄研生物 <small style="display:block;font-size:9px;letter-spacing:2px;color:#789098;font-weight:500">LIPOSOME SOLUTIONS</small></span></a><nav class="navlinks"><a href="#products">产品与服务</a><a href="#technology">技术平台</a><a href="#applications">应用领域</a><a href="#quality">质量与交付</a><a href="#contact" class="btn">获取报价</a></nav></header>
@@ -35,7 +25,68 @@
 <section class="section" id="contact"><div class="wrap contact-grid"><div class="contact-info"><div class="kicker">CONTACT US</div><h2 style="font-size:32px;color:var(--navy);margin:12px 0">提交您的项目需求</h2><p>请留下企业及项目基本信息。页面当前为前端演示版，表单提交会打开本地邮件客户端；正式上线前可接入企业邮箱、CRM 或询盘管理系统。</p><div class="contact-item"><b>商务邮箱</b>sales@yourcompany.com</div><div class="contact-item"><b>联系电话</b>+86 000-0000-0000</div><div class="contact-item"><b>公司地址</b>请替换为企业实际地址</div></div><form class="form" id="leadForm"><div class="field"><label>姓名 *</label><input name="name" required placeholder="您的姓名"></div><div class="field"><label>公司名称 *</label><input name="company" required placeholder="企业 / 机构名称"></div><div class="field"><label>工作邮箱 *</label><input name="email" type="email" required placeholder="name@company.com"></div><div class="field"><label>联系电话</label><input name="phone" placeholder="便于商务联系"></div><div class="field"><label>关注领域</label><select name="interest"><option>请选择</option><option>脂质体原料</option><option>定制化脂质体产品</option><option>技术开发与工艺支持</option><option>科研合作</option><option>其他</option></select></div><div class="field"><label>预计需求量</label><input name="volume" placeholder="如：样品 / 小试 / 批量"></div><div class="field full"><label>项目需求</label><textarea name="message" placeholder="请描述目标成分、应用场景、技术指标、采购计划等"></textarea></div><div class="form-note">提交即表示您同意我们为回复本次业务咨询而使用您提供的联系信息。请勿在此提交敏感个人或商业机密。</div><div class="field full"><button class="btn" type="submit" style="cursor:pointer;width:100%">发送项目需求　→</button></div></form></div></section>
 </main>
 <footer class="footer"><div class="wrap"><div class="foot-top"><div><a class="brand" href="#home"><span class="logo">◉</span><span>澄研生物 <small style="display:block;font-size:9px;letter-spacing:2px;color:#91aab0;font-weight:500">LIPOSOME SOLUTIONS</small></span></a><p>专注脂质体相关产品与技术服务，致力于成为企业客户值得信赖的研发与供应合作伙伴。</p></div><div class="foot-links"><a href="#products">产品与服务</a><a href="#technology">技术平台</a><a href="#applications">应用领域</a><a href="#quality">质量与交付</a><a href="#contact">联系我们</a></div></div><div class="copyright"><span>© 2026 澄研生物（示例品牌）. All rights reserved.</span><span>备案信息 / 隐私政策请在正式上线前补充</span></div></div></footer>
+<!-- Supabase browser SDK + website inquiry form integration -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-document.getElementById('leadForm').addEventListener('submit',function(e){e.preventDefault();const d=new FormData(this);const lines=[...d.entries()].map(([k,v])=>k+'：'+v).join('%0D%0A');const subject=encodeURIComponent('官网B2B项目询盘 - '+(d.get('company')||''));window.location.href='mailto:sales@yourcompany.com?subject='+subject+'&body='+lines;});
+  // Public browser credentials only. Never put a Supabase secret/service_role key here.
+  const supabaseClient = window.supabase.createClient(
+    'https://rmzhtdmtnkfzddgcmzen.supabase.co',
+    'sb_publishable_t_gnNbAi0mmM5ramYz0Khg_CDfgXQ_F'
+  );
+
+  const leadForm = document.getElementById('leadForm');
+
+  leadForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const submitButton = leadForm.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = '正在提交…';
+
+    // Create or reuse a visible status message below the form.
+    let status = document.getElementById('leadFormStatus');
+    if (!status) {
+      status = document.createElement('p');
+      status.id = 'leadFormStatus';
+      status.setAttribute('role', 'status');
+      status.style.cssText = 'grid-column:1/-1;margin:4px 0 0;font-size:14px;';
+      leadForm.appendChild(status);
+    }
+    status.textContent = '';
+
+    const formData = new FormData(leadForm);
+    const interestValue = (formData.get('interest') || '').trim();
+    const quantityValue = (formData.get('volume') || '').trim();
+
+    const inquiry = {
+      name: (formData.get('name') || '').trim(),
+      company: (formData.get('company') || '').trim(),
+      email: (formData.get('email') || '').trim(),
+      phone: (formData.get('phone') || '').trim() || null,
+      interest: (!interestValue || interestValue === '请选择') ? null : interestValue,
+      quantity: quantityValue || null,
+      message: (formData.get('message') || '').trim() || null
+    };
+
+    try {
+      const { error } = await supabaseClient
+        .from('inquiries')
+        .insert([inquiry]);
+
+      if (error) throw error;
+
+      status.textContent = '提交成功！我们已收到您的项目需求。';
+      status.style.color = '#087f83';
+      leadForm.reset();
+    } catch (error) {
+      console.error('Supabase inquiry submission failed:', error);
+      status.textContent = '提交暂时未成功，请稍后重试，或通过商务邮箱联系我们。';
+      status.style.color = '#b42318';
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalButtonText;
+    }
+  });
 </script>
 </body></html>
