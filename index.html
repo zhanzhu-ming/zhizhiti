@@ -10,6 +10,16 @@
 @media(max-width:600px){.wrap{width:min(100% - 32px,1160px)}.topbar .wrap{font-size:10px}.nav{height:66px}.navlinks{display:none}.hero{padding:65px 0 55px}.hero-grid{gap:15px}.hero p{font-size:15px}.molecule{height:270px}.float-label{font-size:10px}.section{padding:64px 0}.section h2{font-size:28px}.cards,.applications,.process{grid-template-columns:1fr}.card{padding:22px}.app{min-height:155px}.stats-grid{gap:12px}.stat{padding:4px 10px}.stat b{font-size:13px}.stat span{font-size:10px}.form{grid-template-columns:1fr}.field.full,.form-note{grid-column:auto}.copyright{flex-direction:column}.quality-points{grid-template-columns:1fr 1fr}}
 </style>
 </head>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+  const supabaseClient = window.supabase.createClient(
+    'https://rmzhtdmtnkfzddgcmzen.supabase.co',
+    'sb_publishable_t_gnNbAi0mmM5ramYz0Khg_CDfgXQ_F'
+  );
+
+  console.log('Supabase connected!');
+</script>
 <body>
 <div class="topbar"><div class="wrap"><span>++专业脂质体技术++ · 面向企业客户的研发与供应服务</span><span>商务咨询：sales@yourcompany.com</span></div></div>
 <header class="wrap nav"><a class="brand" href="#home"><span class="logo">◉</span><span>澄研生物 <small style="display:block;font-size:9px;letter-spacing:2px;color:#789098;font-weight:500">LIPOSOME SOLUTIONS</small></span></a><nav class="navlinks"><a href="#products">产品与服务</a><a href="#technology">技术平台</a><a href="#applications">应用领域</a><a href="#quality">质量与交付</a><a href="#contact" class="btn">获取报价</a></nav></header>
